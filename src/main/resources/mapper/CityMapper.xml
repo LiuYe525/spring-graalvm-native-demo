@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lye.nativeimagedemo.mapper.CityMapper">
+    <insert
+            id="upsert">
+        INSERT INTO city (id, name, state, country)
+        VALUES (#{id}, #{name}, #{state}, #{country})
+        ON DUPLICATE KEY UPDATE
+        <trim prefix="" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="country != null">country = #{country}</if>
+        </trim>
+    </insert>
+</mapper>

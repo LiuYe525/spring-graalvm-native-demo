@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/native-demo?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&${MYSQL_ARG:}
+    username: root
+    password: root_password
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: rabbit
+    password: rabbit_password
+    virtual-host: /
+  data:
+    redis:
+      host: redis
+      port: 6379
+      password: redis_password
+      lettuce:
+        pool:
+          enabled: true
+
+grpc:
+  server:
+    port: 9898
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

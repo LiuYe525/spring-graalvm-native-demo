@@ -1,0 +1,18 @@
+FROM ghcr.io/graalvm/native-image-community:17-muslib as build
+RUN mkdir -p "/workspace"
+RUN mkdir -p "/tmp"
+WORKDIR "/workspace"
+COPY . /workspace
+
+RUN ./mvnw clean compile -T 4 -DskipTests --settings .mvn/conf/settings.xml
+RUN ./mvnw -Pdocker native:compile -DskipTests --settings .mvn/conf/settings.xml
+
+FROM debian:9-slim
+LABEL "author"="lye"
+RUN mkdir -p "/workspace"
+WORKDIR "/workspace"
+COPY --from=build /workspace/target/native-image-demo /workspace/app
+COPY --from=build /workspace/config /workspace/config
+EXPOSE 8080
+EXPOSE 9898
+ENTRYPOINT ./app -Djavax.xml.accessExternalDTD=allenv
