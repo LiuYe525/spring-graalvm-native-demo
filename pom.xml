@@ -189,69 +189,6 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>docker</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.xolstice.maven.plugins</groupId>
-                        <artifactId>protobuf-maven-plugin</artifactId>
-                        <version>0.6.1</version>
-                        <configuration>
-                            <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
-                            </protocArtifact>
-                            <pluginId>grpc-java</pluginId>
-                            <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
-                            </pluginArtifact>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                    <goal>compile-custom</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.graalvm.buildtools</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                        <configuration>
-                            <metadataRepository>
-                                <enabled>true</enabled>
-                            </metadataRepository>
-                            <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                            <mainClass>com.lye.nativeimagedemo.NativeImageDemoApplication</mainClass>
-                            <buildArgs combine.children="append">
-                                --static
-                                --libc=musl
-                                --enable-url-protocols=http
-                                --report-unsupported-elements-at-runtime
-                                -H:+ReportExceptionStackTraces
-                            </buildArgs>
-                            <jvmArgs>
-                                -Dspring.config.location==./config/application.yml
-                                -Djavax.xml.accessExternalDTD=all
-                            </jvmArgs>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>
-                                    <groupId>org.projectlombok</groupId>
-                                    <artifactId>lombok</artifactId>
-                                </exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
     <build>
         <extensions>
             <extension>
@@ -290,7 +227,10 @@
                     </metadataRepository>
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <mainClass>com.lye.nativeimagedemo.NativeImageDemoApplication</mainClass>
+                    <!-- 如果要使用graalvm在本地编译需要去除 static和libc两行参数 -->
                     <buildArgs combine.children="append">
+                        --static
+                        --libc=musl
                         --enable-url-protocols=http
                         --report-unsupported-elements-at-runtime
                         -H:+ReportExceptionStackTraces

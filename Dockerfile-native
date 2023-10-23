@@ -5,7 +5,7 @@ WORKDIR "/workspace"
 COPY . /workspace
 
 RUN ./mvnw clean compile -T 4 -DskipTests --settings .mvn/conf/settings.xml
-RUN ./mvnw -Pdocker native:compile -DskipTests --settings .mvn/conf/settings.xml
+RUN ./mvnw -Pnative native:compile -DskipTests --settings .mvn/conf/settings.xml
 
 FROM debian:9-slim
 LABEL "author"="lye"

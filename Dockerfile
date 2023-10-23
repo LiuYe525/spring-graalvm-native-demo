@@ -2,7 +2,8 @@ FROM openjdk:17-jdk-slim as build
 RUN mkdir -p "/workspace"
 WORKDIR "/workspace"
 COPY . /workspace
-RUN ./mvnw clean compile package -DskipTests --settings .mvn/conf/settings.xml
+RUN ./mvnw clean compile -T 4 -DskipTests --settings .mvn/conf/settings.xml
+RUN ./mvnw package -DskipTests --settings .mvn/conf/settings.xml
 
 FROM openjdk:17-jdk-slim
 LABEL "author"="lye"
